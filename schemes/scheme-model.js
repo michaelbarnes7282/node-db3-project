@@ -1,4 +1,4 @@
-const db= require("../data/db-config.js");
+const db = require("../data/db-config.js");
 
 function find() {
     return db("schemes")
@@ -6,7 +6,8 @@ function find() {
 
 function findById(id) {
     return db("schemes")
-        .where("id", id)
+        .where({ id })
+        .first()
 }
 
 function findSteps(id) {
@@ -17,8 +18,36 @@ function findSteps(id) {
         .orderBy("st.step_number")
 }
 
+function add(schemeData) {
+    return db("schemes")
+        .insert(schemeData)
+}
+
+function addStep(stepData, id) {
+    stepData.scheme_id = id;
+    return db("steps")
+        .insert(stepData)
+}
+
+function update(changes, id) {
+    return db("schemes")
+        .where("id", id)
+        .first()
+        .update(changes)
+}
+
+function remove(id) {
+    return db("schemes")
+        .where("id", id)
+        .del()
+}
+
 module.exports = {
     find,
     findById,
     findSteps,
+    add,
+    addStep,
+    update,
+    remove
 }
